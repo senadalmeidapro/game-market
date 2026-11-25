@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->restrictOnDelete();
             $table->foreignId('product_id')->constrained()->restrictOnDelete();
             $table->foreignId('order_item_id')->constrained()->restrictOnDelete();
-            $table->string('status', 16)->default('active')->index();
+            $table->enum('status', ['active', 'revoked'])->default('active')->index();
             $table->timestamp('issued_at')->useCurrent();
             $table->timestamp('revoked_at')->nullable();
             $table->text('revoked_reason')->nullable();

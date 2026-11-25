@@ -6,6 +6,7 @@
 
 namespace App\Models\Catalog;
 
+use App\Enums\Catalog\ProductVersionStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,7 @@ class ProductVersion extends Model
 
     protected $casts = [
         'product_id' => 'int',
+        'status' => ProductVersionStatus::class,
         'released_at' => 'datetime',
         'is_latest' => 'bool',
     ];

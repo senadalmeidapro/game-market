@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('contact_email')->nullable();
             $table->string('country', 2)->nullable();
-            $table->string('contract_status')->default('unsigned')->index();
+            $table->enum('contract_status', ['unsigned', 'signed'])->default('unsigned')->index();
             $table->string('contract_storage_key')->nullable();
             $table->timestamps();
         });
@@ -38,7 +38,7 @@ return new class extends Migration
 
         Schema::create('platforms', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 32)->unique();
+            $table->enum('code', ['windows', 'linux', 'other'])->unique();
             $table->string('name');
             $table->timestamps();
         });
@@ -46,13 +46,13 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('publisher_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('type', 16)->index();
+            $table->enum('type', ['game', 'photo', 'video'])->index();
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('summary', 500)->nullable();
             $table->longText('description')->nullable();
             $table->unsignedBigInteger('price_amount');
-            $table->string('status', 16)->default('draft')->index();
+            $table->enum('status', ['draft', 'published', 'unpublished', 'archived'])->default('draft')->index();
             $table->timestamp('published_at')->nullable()->index();
             $table->timestamps();
         });
@@ -75,7 +75,7 @@ return new class extends Migration
             $table->string('version_number', 64);
             $table->text('release_notes')->nullable();
             $table->timestamp('released_at')->nullable();
-            $table->string('status', 20)->default('draft')->index();
+            $table->enum('status', ['draft', 'processing', 'distributable', 'withdrawn'])->default('draft')->index();
             $table->boolean('is_latest')->default(false);
             $table->timestamps();
             $table->unique(['product_id', 'version_number']);
@@ -86,12 +86,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_version_id')->constrained()->restrictOnDelete();
             $table->foreignId('platform_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('kind', 16);
+            $table->enum('kind', ['build', 'original', 'preview']);
             $table->string('filename');
             $table->string('storage_key')->unique();
             $table->unsignedBigInteger('size_bytes')->nullable();
             $table->char('sha256', 64)->nullable();
-            $table->string('status', 16)->default('uploading')->index();
+            $table->enum('status', ['uploading', 'uploaded', 'verified', 'failed'])->default('uploading')->index();
             $table->timestamps();
             $table->index(['product_version_id', 'platform_id']);
         });
@@ -100,8 +100,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('platform_id')->constrained()->restrictOnDelete();
-            $table->string('tier', 16);
-            $table->string('os')->nullable();
+            $table->enum('tier', ['minimum', 'recommended']);
             $table->string('cpu')->nullable();
             $table->string('ram')->nullable();
             $table->string('gpu')->nullable();

@@ -6,9 +6,12 @@
 
 namespace App\Models\Catalog;
 
+use App\Enums\Catalog\ProductStatus;
+use App\Enums\Catalog\ProductType;
 use App\Models\Commerce\CartItem;
 use App\Models\Commerce\OrderItem;
 use App\Models\Commerce\WishlistItem;
+use App\Models\Feedback\ProductReview;
 use App\Models\Library\Licence;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Class Product
@@ -43,12 +48,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Collection|OrderItem[] $order_items
  * @property Collection|Licence[] $licences
  */
-class Product extends Model
+class Product extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $table = 'products';
 
     protected $casts = [
         'publisher_id' => 'int',
+        'type' => ProductType::class,
+        'status' => ProductStatus::class,
         'price_amount' => 'int',
         'published_at' => 'datetime',
     ];
@@ -64,6 +73,19 @@ class Product extends Model
         'status',
         'published_at',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('cover')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
+
+        $this->addMediaCollection('screenshots')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
+
+        $this->addMediaCollection('videos')
+            ->acceptsMimeTypes(['video/mp4', 'video/webm', 'video/quicktime']);
+    }
 
     public function publisher(): BelongsTo
     {
@@ -88,6 +110,11 @@ class Product extends Model
     public function systemRequirements(): HasMany
     {
         return $this->hasMany(SystemRequirement::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class);
     }
 
     public function priceHistories(): HasMany

@@ -6,6 +6,7 @@
 
 namespace App\Models\Catalog;
 
+use App\Enums\Catalog\PublisherContractStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Publisher extends Model
 {
     protected $table = 'publishers';
+
+    protected $casts = [
+        'contract_status' => PublisherContractStatus::class,
+    ];
 
     protected $fillable = [
         'name',

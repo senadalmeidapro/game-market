@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
             $table->string('subject');
-            $table->string('category', 20)->default('general')->index();
-            $table->string('status', 20)->default('open')->index();
+            $table->enum('category', ['general', 'technical', 'refund'])->default('general')->index();
+            $table->enum('status', ['open', 'pending', 'resolved'])->default('open')->index();
             $table->timestamps();
             $table->index(['user_id', 'created_at']);
         });

@@ -16,12 +16,12 @@ return new class extends Migration
             $table->string('reference', 32)->unique();
             $table->foreignId('user_id')->constrained()->restrictOnDelete();
             $table->foreignId('promotion_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('status', 16)->default('pending')->index();
+            $table->enum('status', ['pending', 'paid', 'expired', 'cancelled', 'refunded'])->default('pending')->index();
             $table->unsignedBigInteger('subtotal_amount');
             $table->unsignedBigInteger('discount_amount')->default(0);
             $table->unsignedBigInteger('tax_amount')->default(0);
             $table->unsignedBigInteger('total_amount');
-            $table->char('currency', 3)->default('XOF');
+            $table->enum('currency', ['XOF'])->default('XOF');
             $table->string('promotion_code_snapshot')->nullable();
             $table->timestamp('expires_at')->nullable()->index();
             $table->timestamp('paid_at')->nullable()->index();

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->restrictOnDelete();
             $table->string('provider', 64);
-            $table->string('method', 24);
+            $table->enum('method', ['mobile_money', 'card']);
             $table->string('provider_reference')->nullable();
             $table->unsignedBigInteger('amount');
-            $table->char('currency', 3)->default('XOF');
-            $table->string('status', 20)->default('initiated')->index();
+            $table->enum('currency', ['XOF'])->default('XOF');
+            $table->enum('status', ['initiated', 'pending', 'succeeded', 'failed', 'expired', 'flagged'])->default('initiated')->index();
             $table->timestamp('paid_at')->nullable();
             $table->text('failure_reason')->nullable();
             $table->timestamps();
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->foreignId('payment_id')->constrained()->restrictOnDelete();
             $table->unsignedBigInteger('amount');
             $table->text('reason');
-            $table->string('status', 32)->default('requested')->index();
+            $table->enum('status', ['requested', 'approved', 'manual_payout_pending', 'completed', 'rejected'])->default('requested')->index();
             $table->foreignId('requested_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
             $table->string('provider_refund_reference')->nullable();
@@ -59,12 +59,12 @@ return new class extends Migration
 
         Schema::create('ledger_entries', function (Blueprint $table) {
             $table->id();
-            $table->string('type', 20);
+            $table->enum('type', ['sale', 'refund', 'adjustment']);
             $table->foreignId('order_id')->nullable()->constrained()->restrictOnDelete();
             $table->foreignId('payment_id')->nullable()->constrained()->restrictOnDelete();
             $table->foreignId('refund_id')->nullable()->constrained()->restrictOnDelete();
             $table->bigInteger('amount');
-            $table->char('currency', 3)->default('XOF');
+            $table->enum('currency', ['XOF'])->default('XOF');
             $table->timestamp('occurred_at')->useCurrent();
             $table->string('description');
             $table->foreignId('reverses_id')->nullable()->constrained('ledger_entries')->restrictOnDelete();

@@ -46,7 +46,7 @@ return new class extends Migration
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->string('type', 20);
+            $table->enum('type', ['percentage', 'fixed_amount']);
             $table->unsignedBigInteger('value');
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');

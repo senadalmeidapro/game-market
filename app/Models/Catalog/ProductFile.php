@@ -6,6 +6,8 @@
 
 namespace App\Models\Catalog;
 
+use App\Enums\Catalog\ProductFileKind;
+use App\Enums\Catalog\ProductFileStatus;
 use App\Models\Library\DownloadGrant;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,6 +40,8 @@ class ProductFile extends Model
     protected $casts = [
         'product_version_id' => 'int',
         'platform_id' => 'int',
+        'kind' => ProductFileKind::class,
+        'status' => ProductFileStatus::class,
         'size_bytes' => 'int',
     ];
 

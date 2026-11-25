@@ -7,6 +7,8 @@ use App\Models\Commerce\Cart;
 use App\Models\Commerce\Order;
 use App\Models\Commerce\PromotionUsage;
 use App\Models\Commerce\Wishlist;
+use App\Models\Feedback\ProductReview;
+use App\Models\Feedback\ProductReviewComment;
 use App\Models\Identity\Passkey;
 use App\Models\Identity\SocialAccount;
 use App\Models\Library\DownloadGrant;
@@ -73,6 +75,16 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     public function wishlist(): HasOne
     {
         return $this->hasOne(Wishlist::class);
+    }
+
+    public function productReviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    public function productReviewComments(): HasMany
+    {
+        return $this->hasMany(ProductReviewComment::class);
     }
 
     public function orders(): HasMany
