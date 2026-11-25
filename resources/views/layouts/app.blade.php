@@ -20,7 +20,23 @@
     </head>
 
     <body class="antialiased">
-        {{ $slot }}
+        <header class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
+            <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+                <a href="{{ route('home') }}" wire:navigate class="font-black tracking-[0.2em] text-amber-500">GAMEHUB</a>
+
+                @auth
+                    <div class="flex items-center gap-4 text-sm">
+                        <a href="{{ route('profile.edit') }}" wire:navigate class="text-zinc-600 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white">Mon compte</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="text-zinc-600 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white">Déconnexion</button>
+                        </form>
+                    </div>
+                @endauth
+            </div>
+        </header>
+
+        <main>{{ $slot }}</main>
 
         @livewire('notifications')
 
