@@ -8,6 +8,23 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Some existing databases already have Spatie's media table outside the
+        // Laravel migration history. Keep those databases compatible with migrate.
+        if (Schema::hasTable('media')) {
+            $requiredColumns = [
+                'id', 'model_type', 'model_id', 'uuid', 'collection_name', 'name', 'file_name',
+                'mime_type', 'disk', 'conversions_disk', 'size', 'manipulations',
+                'custom_properties', 'generated_conversions', 'responsive_images', 'order_column',
+                'created_at', 'updated_at',
+            ];
+
+            if (! Schema::hasColumns('media', $requiredColumns)) {
+                throw new RuntimeException('The existing media table does not match Spatie Media Library.');
+            }
+
+            return;
+        }
+
         Schema::create('media', function (Blueprint $table) {
             $table->id();
 

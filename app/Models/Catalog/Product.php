@@ -83,6 +83,15 @@ class Product extends Model implements HasMedia
         $this->addMediaCollection('screenshots')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
 
+        $this->addMediaCollection('trailers')
+            ->acceptsMimeTypes(['video/mp4', 'video/webm', 'video/quicktime']);
+
+        $this->addMediaCollection('gameplay')
+            ->acceptsMimeTypes(['video/mp4', 'video/webm', 'video/quicktime']);
+
+        $this->addMediaCollection('short_plays')
+            ->acceptsMimeTypes(['video/mp4', 'video/webm', 'video/quicktime']);
+
         $this->addMediaCollection('videos')
             ->acceptsMimeTypes(['video/mp4', 'video/webm', 'video/quicktime']);
     }

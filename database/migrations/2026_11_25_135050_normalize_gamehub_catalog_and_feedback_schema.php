@@ -26,8 +26,6 @@ return new class extends Migration
             DB::statement('ALTER TABLE system_requirements DROP COLUMN req');
         }
 
-        Schema::dropIfExists('media_product');
-
         $this->normalizePlatformCodes();
 
         Schema::create('product_reviews', function (Blueprint $table): void {
