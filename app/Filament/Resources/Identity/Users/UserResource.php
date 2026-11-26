@@ -35,7 +35,7 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
-    protected static bool $allowCreate = false;
+    protected static bool $allowCreate = true;
 
     protected static bool $allowEdit = true;
 

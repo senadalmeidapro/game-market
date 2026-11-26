@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Catalog\Products\Schemas;
 
 use App\Enums\Catalog\CoverFormat;
-use App\Enums\Catalog\ProductStatus;
 use App\Models\Catalog\Category;
 use App\Models\Catalog\Genre;
 use App\Models\Catalog\Product;
@@ -56,11 +55,6 @@ class ProductForm
                 ->required()
                 ->numeric()
                 ->minValue(0),
-            Select::make('status')
-                ->label('Statut')
-                ->options(ProductStatus::class)
-                ->default('draft')
-                ->required(),
             Placeholder::make('rating_summary')
                 ->label('Note moyenne')
                 ->content(fn (?Product $record): string => self::ratingSummary($record)),

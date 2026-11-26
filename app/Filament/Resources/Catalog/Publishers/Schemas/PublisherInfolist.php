@@ -25,10 +25,6 @@ class PublisherInfolist
                     ->label('À propos')
                     ->placeholder('-')
                     ->columnSpanFull(),
-                TextEntry::make('contract_status')
-                    ->badge(),
-                TextEntry::make('contract_storage_key')
-                    ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),

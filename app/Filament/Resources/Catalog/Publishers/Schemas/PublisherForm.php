@@ -2,9 +2,7 @@
 
 namespace App\Filament\Resources\Catalog\Publishers\Schemas;
 
-use App\Enums\Catalog\PublisherContractStatus;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -34,15 +32,6 @@ class PublisherForm
                     ->label('À propos de l’éditeur')
                     ->rows(5)
                     ->columnSpanFull(),
-                Select::make('contract_status')
-                    ->options(PublisherContractStatus::class)
-                    ->default('unsigned')
-                    ->required(),
-                FileUpload::make('contract_storage_key')
-                    ->label('Contrat signe')
-                    ->disk('local')
-                    ->directory('publishers/contracts')
-                    ->visibility('private'),
             ]);
     }
 }

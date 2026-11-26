@@ -2,13 +2,17 @@
 
 namespace App\Filament\Resources\Catalog\Products\Tables;
 
+use App\Enums\Catalog\ProductStatus;
 use App\Models\Catalog\Product;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class ProductsTable
@@ -60,7 +64,13 @@ class ProductsTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')->label('Statut')->options(ProductStatus::class),
+                SelectFilter::make('publisher')->label('Editeur')->relationship('publisher', 'name')->searchable()->preload(),
+                Filter::make('published_at')->label('Date de publication')->form([
+                    DatePicker::make('from')->label('Du'), DatePicker::make('until')->label('Au'),
+                ])->query(fn ($query, array $data) => $query
+                    ->when($data['from'] ?? null, fn ($query, $date) => $query->whereDate('published_at', '>=', $date))
+                    ->when($data['until'] ?? null, fn ($query, $date) => $query->whereDate('published_at', '<=', $date))),
             ])
             ->recordActions([
                 ViewAction::make(),

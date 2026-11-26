@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\DashboardOverview;
+use App\Filament\Widgets\RevenueChart;
 use Filament\Pages\Dashboard as BaseDashboard;
 
 class Dashboard extends BaseDashboard
@@ -14,6 +15,6 @@ class Dashboard extends BaseDashboard
     /** @return array<class-string> */
     public function getWidgets(): array
     {
-        return [DashboardOverview::class];
+        return [DashboardOverview::class, RevenueChart::class];
     }
 }

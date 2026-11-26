@@ -1,4 +1,4 @@
-# GAMEHUB — Plan d’exécution et suivi de la roadmap
+﻿# GAMEHUB — Plan d’exécution et suivi de la roadmap
 
 Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHUB — Definitive Scope and Design Dossier (Laravel).md>) en tâches de développement suivables.
 
@@ -12,18 +12,20 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 ## Situation de départ
 
-### Déjà en place
+### Situation constatée dans le dépôt au 26 novembre 2026
 
-- [x] Les migrations du schéma GAMEHUB ont été générées et appliquées dans le cadre du travail précédent.
-- [x] Les modèles Eloquent GAMEHUB existent et sont organisés par domaine sous `app/Models`.
-- [x] Le fournisseur de panneau Filament et le chemin `/admin` existent.
-- [x] Le socle d’authentification Laravel existe.
-- [x] Les migrations de rôles et permissions ainsi que les modèles de rôles sont présents.
+- [x] Le schéma et les modèles GAMEHUB sont présents par domaine sous `app/Models`.
+- [x] Le panneau `/admin`, ses groupes de navigation et les ressources Filament Catalogue, Commerce, Paiements, Finance, Bibliothèque, Support, Identité et Plateforme sont présents.
+- [x] Le catalogue comprend les formulaires de jeux, les médias, les versions, les fichiers, les exigences système, les catégories, les genres, les plateformes et les éditeurs.
+- [x] Les catégories et genres sont hiérarchisés; le dashboard Filament et ses indicateurs initiaux existent.
+- [x] L’accès au panneau est limité aux rôles staff autorisés, avec email vérifié et 2FA confirmée (`User::canAccessPanel`).
+- [x] La création d’un compte depuis l’administration envoie les liens de vérification d’adresse et de définition du mot de passe; un compte suspendu ne peut pas entrer dans le panneau.
+- [x] La suppression de la dernière fonction super administrateur est bloquée, et une invitation staff ne donne accès à l’admin qu’après vérification email et 2FA confirmée.
+- [x] Les transferts de builds reprennent par blocs vers le disque privé local, et l’assemblage calcule le SHA-256 côté serveur.
+- [x] Les connexions staff confirmées, changements de rôle, produits, commandes, paiements, remboursements et écritures comptables alimentent l’audit.
+- [ ] La vitrine et le parcours boutique sont présents à des degrés divers; les semaines 7 à 12 ci-dessous doivent être reprises par revue de code avant de déclarer leurs critères terminés.
 
-### À construire
-
-- [ ] Les ressources métier Filament ne sont pas encore présentes dans `app/Filament`.
-- [ ] La vitrine est encore une page d’accueil de base; le parcours boutique reste à construire.
+Les cases des jours restent un plan d’acceptation et ne sont pas cochées au seul motif qu’un écran CRUD existe. Les nombres de la vue globale ci-dessous donnent une estimation du travail de domaine déjà matérialisé dans le dépôt, pas une recette fonctionnelle.
 
 ### Contraintes de cette roadmap
 
@@ -38,12 +40,12 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 | Semaine | Domaine principal | Livrable de fin de semaine | État |
 |---|---|---|---|
-| 1 | Accès, sécurité et structure Filament | Back-office protégé, rôles opérationnels, navigation de base | ⬜ À faire |
-| 2 | Référentiels et éditeurs | Gestion des catégories, genres, plateformes et éditeurs | ⬜ À faire |
-| 3 | Fiches produits | Création, modification, recherche et archivage des produits | ⬜ À faire |
-| 4 | Versions, fichiers et publication | Gestion des versions et garde-fous de publication | ⬜ À faire |
-| 5 | Promotions, clients, commandes et support | Gestion administrative des opérations courantes | ⬜ À faire |
-| 6 | Paramètres, audit, rapports et tableau de bord | Back-office MVP cohérent et recette interne | ⬜ À faire |
+| 1 | Accès, sécurité et structure Filament | Base admin, RBAC, 2FA, invitation, suspension et garde du dernier super administrateur présents; livraison email à valider en environnement | En cours |
+| 2 | Référentiels et éditeurs | Ressources présentes et suppression protégée | En cours |
+| 3 | Fiches produits | Fiches et médias présents; publication contrôlée, historique prix et filtres ajoutés | En cours |
+| 4 | Versions, fichiers et publication | Hash, vérification, publication et transfert local reprenable présents; transfert multipart S3 à prévoir si cette cible est choisie | En cours |
+| 5 | Promotions, clients, commandes et support | Ressources présentes; filtres de commande et fil de support ajoutés | En cours |
+| 6 | Paramètres, audit, rapports et tableau de bord | Audit opérationnel filtrable et ventes/remboursements par période; recette et rapports à compléter | En cours |
 | 7 | Vitrine et catalogue public | Parcours public de découverte des produits | ⬜ À faire |
 | 8 | Panier et liste de souhaits | Parcours visiteur et client avec fusion après connexion | ⬜ À faire |
 | 9 | Préparation de commande | Récapitulatif client et calcul serveur, paiement toujours coupé | ⬜ À faire |
@@ -103,7 +105,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** accès admin contrôlé, 2FA obligatoire, rôles initiaux chargés, dernier super administrateur protégé, événements sensibles audités.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -134,9 +136,8 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 ### Jour 4 — Ressource éditeurs
 
-- [ ] Créer la ressource Éditeurs avec coordonnées utiles et statut contractuel.
-- [ ] Prévoir le stockage privé du contrat quand la configuration de stockage est prête.
-- [ ] Bloquer la publication d’un produit lié à un éditeur dont le contrat n’est pas signé, selon la règle métier.
+- [ ] Créer la ressource Éditeurs avec coordonnées utiles.
+- [x] La publication dépend des prérequis de catalogue et de distribution.
 - [ ] Ne pas créer de compte ni d’espace de connexion éditeur.
 
 ### Jour 5 — Revue des référentiels
@@ -148,7 +149,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** les quatre ressources sont utilisables, les données référentielles ne peuvent pas être supprimées lorsqu’elles sont utilisées et l’accès est restreint par permissions.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -193,7 +194,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** un gestionnaire catalogue peut créer et modifier les trois types de fiches; toute nouvelle fiche est un brouillon; les prix historiques et les actions sensibles sont préservés.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -223,22 +224,22 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 ### Jour 4 — Gros fichiers et contrôles de stockage
 
-- [ ] Évaluer et configurer le transfert multipart/chunké vers le stockage objet retenu, sans faire transiter des fichiers de plusieurs Go par une requête PHP classique.
-- [ ] Ajouter un job de calcul/validation du checksum après transfert.
-- [ ] Afficher état du transfert, taille et résultat du checksum à l’administrateur.
-- [ ] Documenter les variables de configuration et le comportement local lorsque le stockage objet n’est pas configuré.
+- [x] Ajouter un transfert par blocs reprenable vers le disque privé local, avec reprise après re-sélection du même fichier.
+- [x] Assembler le fichier en flux serveur, contrôler sa taille et calculer le SHA-256 avant validation.
+- [x] Afficher la progression, la taille et le résultat du checksum dans le formulaire.
+- [ ] Si le stockage objet S3 devient la cible, remplacer l’assemblage local par le protocole multipart S3 et configurer ses identifiants.
 
 ### Jour 5 — Publication et dépublication
 
 - [ ] Implémenter une action explicite de publication et une action de dépublication.
 - [ ] Bloquer la publication sans prix, couverture, et version/fichier distribuable adapté au type.
-- [ ] Bloquer la publication si le contrat de l’éditeur associé n’est pas signé.
+- [x] La publication repose sur les prérequis de catalogue et de distribution.
 - [ ] Garder l’accès aux propriétaires existants lorsqu’un produit est dépublié ou archivé.
 - [ ] Vérifier l’audit des transitions de statut.
 
 **Critères de sortie :** publication impossible sans contenu requis; fichiers de distribution stockés en privé et vérifiés; règles de version et d’éditeur appliquées.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -284,7 +285,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** promotion, client, commande et ticket gérables; aucune action admin ne peut contourner l’état de paiement désactivé.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -329,7 +330,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** catalogue administrable de bout en bout; accès par rôle cohérent; ressources principales auditées; paramètres et pages légales disponibles; dashboard et états vides lisibles.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -375,7 +376,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** visiteur peut trouver un produit publié, appliquer des filtres et consulter sa fiche sans accéder aux données privées.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -420,7 +421,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** panier et souhaits persistent selon le statut utilisateur, la fusion ne crée pas de doublons et les montants du navigateur ne font jamais autorité.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -465,7 +466,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** checkout de revue fonctionnel et sécurisé; le client peut préparer son achat mais ne peut pas payer ni obtenir une commande payée.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -510,7 +511,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** ressources et parcours bibliothèque prêts; aucun accès à un fichier sans autorisation serveur courte durée; délivrance impossible depuis un paiement non confirmé.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -554,7 +555,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** support et courriels opérationnels selon configuration; interface paiement préparée mais inutilisable jusqu’à une activation explicitement approuvée après validation fournisseur.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -600,7 +601,7 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 **Critères de sortie :** parcours principaux vérifiés, restauration documentée, configuration d’exploitation connue, paiements toujours coupés tant que la checklist fournisseur n’est pas satisfaite.
 
-**Avancement de la semaine :** `0 / 5 jours` — **État :** ⬜ À faire — **Blocages / notes :** _à compléter_
+**Avancement de la semaine :** à réestimer selon les critères de sortie; la présence des ressources seules ne vaut pas recette.
 
 ---
 
@@ -610,18 +611,18 @@ Ce document transforme le périmètre du [dossier de conception GAMEHUB](<GAMEHU
 
 | Semaine | Jours terminés | Avancement | État | Date de revue | Note / décision |
 |---|---:|---:|---|---|---|
-| 1 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 2 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 3 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 4 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 5 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 6 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 7 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 8 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 9 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 10 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 11 | 0/5 | 0 % | ⬜ À faire | — | — |
-| 12 | 0/5 | 0 % | ⬜ À faire | — | — |
+| 1 | À réestimer | — | En cours | 2026-11-26 | Invitation, suspension, vérification 2FA et protection super admin codées; livraison email à valider dans l’environnement. |
+| 2 | À réestimer | — | En cours | 2026-11-26 | Ressources et hiérarchies présentes; protection d’usage renforcée dans Filament et en base. |
+| 3 | À réestimer | — | En cours | 2026-11-26 | Ressource produit, médias, publication contrôlée, historique de prix et filtres présents. |
+| 4 | À réestimer | — | En cours | 2026-11-26 | Transfert local par blocs reprenable, assemblage, taille et SHA-256 testés; multipart S3 seulement si cette cible est retenue. |
+| 5 | À réestimer | — | En cours | 2026-11-26 | Commandes et tickets présents; filtres et fil de support ajoutés. |
+| 6 | À réestimer | — | En cours | 2026-11-26 | Dashboard ventes/remboursements nettes, audit filtrable en lecture seule, événements staff et opérations financières tracés. |
+| 7 | À réestimer | — | À revoir | 2026-11-26 | Parcours vitrine à relire avant de compter les critères. |
+| 8 | À réestimer | — | À revoir | 2026-11-26 | Panier et liste de souhaits à relire avant de compter les critères. |
+| 9 | À réestimer | — | À revoir | 2026-11-26 | Checkout à relire; paiements toujours hors périmètre d’activation. |
+| 10 | À réestimer | — | À revoir | 2026-11-26 | Bibliothèque et téléchargements à relire avant de compter les critères. |
+| 11 | À réestimer | — | À revoir | 2026-11-26 | Emails et configuration de paiement dépendent de la revue et du prestataire. |
+| 12 | À réestimer | — | À revoir | 2026-11-26 | Recette, sauvegardes et préparation de mise en service restent à confirmer. |
 
 ## Conditions non négociables avant activation des paiements
 

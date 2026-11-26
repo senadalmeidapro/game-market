@@ -30,11 +30,6 @@ class PublishersTable
                     ->label('À propos')
                     ->limit(70)
                     ->toggleable(),
-                TextColumn::make('contract_status')
-                    ->badge()
-                    ->searchable(),
-                TextColumn::make('contract_storage_key')
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

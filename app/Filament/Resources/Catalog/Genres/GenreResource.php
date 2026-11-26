@@ -107,7 +107,8 @@ class GenreResource extends Resource
         return static::$allowDelete
             && filled(static::$managePermission)
             && auth()->user()?->can(static::$managePermission) === true
-            && ! $record->products()->exists();
+            && ! $record->products()->exists()
+            && ! $record->children()->exists();
     }
 
     public static function canDeleteAny(): bool

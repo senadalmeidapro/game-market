@@ -18,9 +18,9 @@ use App\Models\Platform\AuditLog;
 use App\Models\Support\SupportMessage;
 use App\Models\Support\SupportTicket;
 use Database\Factories\UserFactory;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,7 +34,7 @@ use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'phone'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'status'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, PasskeyUser
 {
@@ -45,6 +45,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Pas
     {
         return $panel->getId() === 'admin'
             && $this->hasAnyRole(['super_admin', 'catalog_manager', 'finance_manager', 'marketing_manager', 'support_agent'])
+            && $this->status === 'active'
             && $this->email_verified_at !== null
             && $this->two_factor_confirmed_at !== null;
     }

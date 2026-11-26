@@ -6,7 +6,10 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class OrdersTable
@@ -55,7 +58,15 @@ class OrdersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')->label('Statut')->options([
+                    'pending' => 'En attente', 'paid' => 'Payée', 'expired' => 'Expirée', 'cancelled' => 'Annulée', 'refunded' => 'Remboursée',
+                ]),
+                SelectFilter::make('user')->label('Client')->relationship('user', 'name')->searchable()->preload(),
+                Filter::make('created_at')->label('Date de commande')->form([
+                    DatePicker::make('from')->label('Du'), DatePicker::make('until')->label('Au'),
+                ])->query(fn ($query, array $data) => $query
+                    ->when($data['from'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '>=', $date))
+                    ->when($data['until'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '<=', $date))),
             ])
             ->recordActions([
                 ViewAction::make(),

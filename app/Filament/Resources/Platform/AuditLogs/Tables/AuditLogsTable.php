@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\Platform\AuditLogs\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use App\Models\Platform\AuditLog;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class AuditLogsTable
@@ -15,9 +16,7 @@ class AuditLogsTable
     {
         return $table
             ->columns([
-                TextColumn::make('actor_id')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('user.name')->label('Auteur')->placeholder('Système')->searchable(),
                 TextColumn::make('action')
                     ->searchable(),
                 TextColumn::make('subject_type')
@@ -33,16 +32,18 @@ class AuditLogsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('user')->label('Acteur')->relationship('user', 'name')->searchable()->preload(),
+                SelectFilter::make('action')->label('Action')->options(fn (): array => AuditLog::query()->distinct()->orderBy('action')->pluck('action', 'action')->all()),
+                SelectFilter::make('subject_type')->label('Type d’objet')->options(fn (): array => AuditLog::query()->whereNotNull('subject_type')->distinct()->orderBy('subject_type')->pluck('subject_type', 'subject_type')->all()),
+                Filter::make('created_at')->label('Période')->form([
+                    DatePicker::make('from')->label('Du'), DatePicker::make('until')->label('Au'),
+                ])->query(fn ($query, array $data) => $query
+                    ->when($data['from'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '>=', $date))
+                    ->when($data['until'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '<=', $date))),
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->toolbarActions([]);
     }
 }

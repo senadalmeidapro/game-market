@@ -7,6 +7,7 @@ use App\Enums\Catalog\ProductFileKind;
 use App\Enums\Catalog\ProductFileStatus;
 use App\Enums\Catalog\ProductVersionStatus;
 use App\Enums\Catalog\RequirementTier;
+use App\Filament\Forms\Components\BuildFileUpload;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
@@ -153,13 +154,11 @@ class ProductCreateForm
                                             ->label('Fichiers de cette version')
                                             ->relationship()
                                             ->schema([
-                                                FileUpload::make('storage_key')
-                                                    ->label('Fichier du jeu')
-                                                    ->disk('local')
-                                                    ->directory('game-builds')
-                                                    ->visibility('private')
-                                                    ->storeFileNamesIn('filename')
-                                                    ->required(),
+                                                BuildFileUpload::make('storage_key')
+                                                    ->label('Fichier du jeu — transfert reprenable')
+                                                    ->filenameField('filename')
+                                                    ->sizeField('size_bytes')
+                                                    ->sha256Field('sha256'),
                                                 Select::make('platform_id')
                                                     ->label('Systeme')
                                                     ->relationship('platform', 'name')
@@ -174,9 +173,8 @@ class ProductCreateForm
                                                     ->options(ProductFileStatus::class)
                                                     ->default(ProductFileStatus::Uploaded->value)
                                                     ->required(),
-                                                TextInput::make('sha256')
-                                                    ->label('Empreinte SHA-256')
-                                                    ->maxLength(64),
+                                                TextInput::make('size_bytes')->label('Taille (octets)')->numeric()->readOnly(),
+                                                TextInput::make('sha256')->label('Empreinte SHA-256')->readOnly(),
                                             ])
                                             ->columns(2)
                                             ->collapsed()
