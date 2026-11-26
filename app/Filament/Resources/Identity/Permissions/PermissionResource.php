@@ -41,7 +41,7 @@ class PermissionResource extends Resource
 
     protected static bool $allowDelete = false;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedLockClosed;
 
     protected static ?string $recordTitleAttribute = 'name';
 

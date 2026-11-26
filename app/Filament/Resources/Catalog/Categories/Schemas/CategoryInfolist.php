@@ -12,8 +12,8 @@ class CategoryInfolist
         return $schema
             ->components([
                 TextEntry::make('parent.name')
-                    ->label('Parent')
-                    ->placeholder('-'),
+                    ->label('Groupe de catégories')
+                    ->placeholder('Catégorie principale'),
                 TextEntry::make('name'),
                 TextEntry::make('slug'),
                 TextEntry::make('created_at')

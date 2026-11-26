@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $logo_storage_key
  * @property string|null $contact_email
  * @property string|null $country
+ * @property string|null $description
  * @property string $contract_status
  * @property string|null $contract_storage_key
  * @property Carbon|null $created_at
@@ -39,6 +40,7 @@ class Publisher extends Model
         'logo_storage_key',
         'contact_email',
         'country',
+        'description',
         'contract_status',
         'contract_storage_key',
     ];

@@ -26,6 +26,10 @@ class PublishersTable
                     ->searchable(),
                 TextColumn::make('country')
                     ->searchable(),
+                TextColumn::make('description')
+                    ->label('À propos')
+                    ->limit(70)
+                    ->toggleable(),
                 TextColumn::make('contract_status')
                     ->badge()
                     ->searchable(),

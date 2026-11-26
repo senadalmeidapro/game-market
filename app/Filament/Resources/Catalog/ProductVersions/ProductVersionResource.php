@@ -41,7 +41,7 @@ class ProductVersionResource extends Resource
 
     protected static bool $allowDelete = false;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowPathRoundedSquare;
 
     protected static ?string $recordTitleAttribute = 'version_number';
 

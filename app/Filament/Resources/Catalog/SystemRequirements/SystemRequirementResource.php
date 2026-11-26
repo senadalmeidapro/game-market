@@ -41,7 +41,7 @@ class SystemRequirementResource extends Resource
 
     protected static bool $allowDelete = true;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedComputerDesktop;
 
     protected static ?string $recordTitleAttribute = 'tier';
 

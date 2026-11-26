@@ -41,7 +41,7 @@ class PublisherResource extends Resource
 
     protected static bool $allowDelete = true;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
 
     protected static ?string $recordTitleAttribute = 'name';
 

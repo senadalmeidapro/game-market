@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Catalog\Products\Schemas;
 
 use App\Enums\Catalog\CoverFormat;
 use App\Enums\Catalog\ProductStatus;
+use App\Models\Catalog\Category;
+use App\Models\Catalog\Genre;
 use App\Models\Catalog\Product;
 use App\Services\Catalog\ProductCoverColorDetector;
 use Filament\Forms\Components\ColorPicker;
@@ -175,13 +177,19 @@ class ProductForm
             Select::make('categories')
                 ->label('Categories')
                 ->multiple()
-                ->relationship('categories', 'name')
+                ->relationship('categories', 'name', fn ($query) => $query->whereNotNull('parent_id')->with('parent'))
+                ->getOptionLabelFromRecordUsing(fn (Category $record): string => $record->parent
+                    ? $record->parent->name.' › '.$record->name
+                    : $record->name)
                 ->searchable()
                 ->preload(),
             Select::make('genres')
                 ->label('Genres')
                 ->multiple()
-                ->relationship('genres', 'name')
+                ->relationship('genres', 'name', fn ($query) => $query->with('parent'))
+                ->getOptionLabelFromRecordUsing(fn (Genre $record): string => $record->parent
+                    ? $record->parent->name.' › '.$record->name
+                    : $record->name)
                 ->searchable()
                 ->preload(),
             DateTimePicker::make('published_at')

@@ -21,6 +21,10 @@ class PublisherInfolist
                     ->placeholder('-'),
                 TextEntry::make('country')
                     ->placeholder('-'),
+                TextEntry::make('description')
+                    ->label('À propos')
+                    ->placeholder('-')
+                    ->columnSpanFull(),
                 TextEntry::make('contract_status')
                     ->badge(),
                 TextEntry::make('contract_storage_key')

@@ -12,6 +12,9 @@ class GenreInfolist
         return $schema
             ->components([
                 TextEntry::make('name'),
+                TextEntry::make('parent.name')
+                    ->label('Genre parent')
+                    ->placeholder('Genre principal'),
                 TextEntry::make('slug'),
                 TextEntry::make('created_at')
                     ->dateTime()

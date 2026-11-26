@@ -16,6 +16,8 @@ class CategoriesTable
         return $table
             ->columns([
                 TextColumn::make('parent.name')
+                    ->label('Groupe de catégories')
+                    ->placeholder('Catégorie principale')
                     ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),

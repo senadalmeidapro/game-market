@@ -16,6 +16,11 @@ class GenresTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Genre ou sous-genre')
+                    ->searchable(),
+                TextColumn::make('parent.name')
+                    ->label('Genre parent')
+                    ->placeholder('Genre principal')
                     ->searchable(),
                 TextColumn::make('slug')
                     ->searchable(),

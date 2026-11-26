@@ -41,7 +41,7 @@ class MailLogResource extends Resource
 
     protected static bool $allowDelete = false;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
     protected static ?string $recordTitleAttribute = 'recipient';
 

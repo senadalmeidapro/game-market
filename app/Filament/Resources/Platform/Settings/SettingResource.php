@@ -41,7 +41,7 @@ class SettingResource extends Resource
 
     protected static bool $allowDelete = false;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
     protected static ?string $recordTitleAttribute = 'key';
 

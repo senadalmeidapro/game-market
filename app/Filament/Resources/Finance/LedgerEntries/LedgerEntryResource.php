@@ -41,7 +41,7 @@ class LedgerEntryResource extends Resource
 
     protected static bool $allowDelete = false;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
 
     protected static ?string $recordTitleAttribute = 'id';
 

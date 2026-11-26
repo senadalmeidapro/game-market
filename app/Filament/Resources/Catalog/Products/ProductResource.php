@@ -45,7 +45,7 @@ class ProductResource extends Resource
 
     protected static bool $allowDelete = false;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPuzzlePiece;
 
     protected static ?string $recordTitleAttribute = 'title';
 

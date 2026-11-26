@@ -41,7 +41,7 @@ class PlatformResource extends Resource
 
     protected static bool $allowDelete = true;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCpuChip;
 
     protected static ?string $recordTitleAttribute = 'name';
 
