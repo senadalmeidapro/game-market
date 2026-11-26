@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $id
  * @property string $name
+ * @property string|null $logo_storage_key
  * @property string|null $contact_email
  * @property string|null $country
  * @property string $contract_status
@@ -35,6 +36,7 @@ class Publisher extends Model
 
     protected $fillable = [
         'name',
+        'logo_storage_key',
         'contact_email',
         'country',
         'contract_status',

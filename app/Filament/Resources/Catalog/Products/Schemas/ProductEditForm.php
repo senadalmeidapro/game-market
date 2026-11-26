@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Catalog\Products\Schemas;
 
+use App\Filament\Resources\Catalog\Products\RelationManagers\ProductCoverVariantsRelationManager;
 use App\Filament\Resources\Catalog\Products\RelationManagers\ProductFilesRelationManager;
 use App\Filament\Resources\Catalog\Products\RelationManagers\ProductMediaRelationManager;
 use App\Filament\Resources\Catalog\Products\RelationManagers\ProductSystemRequirementsRelationManager;
@@ -26,6 +27,10 @@ class ProductEditForm
                 Tabs::make('Jeu')
                     ->extraAttributes(['class' => 'gamehub-centered-tabs'])
                     ->tabs([
+                        Tab::make('Jaquettes')
+                            ->schema([
+                                Livewire::make(ProductCoverVariantsRelationManager::class, $managerProperties),
+                            ]),
                         Tab::make('A propos')
                             ->schema(ProductForm::aboutComponents())
                             ->columns(2),

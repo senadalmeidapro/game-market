@@ -6,6 +6,7 @@ use App\Filament\Resources\Catalog\Products\Pages\CreateProduct;
 use App\Filament\Resources\Catalog\Products\Pages\EditProduct;
 use App\Filament\Resources\Catalog\Products\Pages\ListProducts;
 use App\Filament\Resources\Catalog\Products\Pages\ViewProduct;
+use App\Filament\Resources\Catalog\Products\RelationManagers\ProductCoverVariantsRelationManager;
 use App\Filament\Resources\Catalog\Products\RelationManagers\ProductFilesRelationManager;
 use App\Filament\Resources\Catalog\Products\RelationManagers\ProductMediaRelationManager;
 use App\Filament\Resources\Catalog\Products\RelationManagers\ProductSystemRequirementsRelationManager;
@@ -68,6 +69,7 @@ class ProductResource extends Resource
         return [
             ProductSystemRequirementsRelationManager::class,
             ProductMediaRelationManager::class,
+            ProductCoverVariantsRelationManager::class,
             ProductFilesRelationManager::class,
         ];
     }

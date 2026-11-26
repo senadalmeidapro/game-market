@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Catalog\Products\Pages;
 
+use App\Enums\Catalog\CoverFormat;
 use App\Filament\Resources\Catalog\Products\ProductResource;
 use App\Filament\Resources\Catalog\Products\Schemas\ProductEditForm;
+use App\Services\Catalog\ProductCoverColorDetector;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
@@ -21,6 +23,26 @@ class EditProduct extends EditRecord
     protected function getAllRelationManagers(): array
     {
         return [];
+    }
+
+    protected function afterSave(): void
+    {
+        if (filled($this->data['cover_upload'] ?? null)) {
+            $cover = $this->record
+                ->addMediaFromDisk($this->data['cover_upload'], 'local')
+                ->toMediaCollection('cover');
+
+            $cover->setCustomProperty('format', CoverFormat::LibraryCapsule->value);
+            $cover->save();
+
+            if (! $this->record->colors_are_manual) {
+                $colors = app(ProductCoverColorDetector::class)->detect($cover->getPath());
+
+                if ($colors) {
+                    $this->record->forceFill($colors)->save();
+                }
+            }
+        }
     }
 
     protected function getHeaderActions(): array

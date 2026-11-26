@@ -16,6 +16,13 @@ class PublisherForm
             ->components([
                 TextInput::make('name')
                     ->required(),
+                FileUpload::make('logo_storage_key')
+                    ->label('Logo editeur')
+                    ->image()
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
+                    ->disk('public')
+                    ->directory('publishers/logos')
+                    ->visibility('public'),
                 TextInput::make('contact_email')
                     ->email(),
                 TextInput::make('country'),

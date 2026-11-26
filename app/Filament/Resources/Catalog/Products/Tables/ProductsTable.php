@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\Catalog\Products\Tables;
 
+use App\Models\Catalog\Product;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -15,9 +17,17 @@ class ProductsTable
     {
         return $table
             ->columns([
+                ImageColumn::make('cover')
+                    ->label('Jaquette')
+                    ->getStateUsing(fn (Product $record): ?string => $record->getFirstMediaUrl('cover') ?: null)
+                    ->height(64),
                 TextColumn::make('publisher.name')
                     ->label('Editeur')
                     ->searchable(),
+                ImageColumn::make('publisher.logo_storage_key')
+                    ->label('Logo editeur')
+                    ->disk('public')
+                    ->height(40),
                 TextColumn::make('categories.name')
                     ->label('Categories')
                     ->badge(),

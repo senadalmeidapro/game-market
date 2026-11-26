@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Catalog\Publishers\Schemas;
 
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
@@ -12,6 +13,10 @@ class PublisherInfolist
         return $schema
             ->components([
                 TextEntry::make('name'),
+                ImageEntry::make('logo_storage_key')
+                    ->label('Logo')
+                    ->disk('public')
+                    ->height(80),
                 TextEntry::make('contact_email')
                     ->placeholder('-'),
                 TextEntry::make('country')

@@ -14,6 +14,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductMediaRelationManager extends RelationManager
 {
@@ -42,6 +43,7 @@ class ProductMediaRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->whereNotIn('collection_name', ['cover', 'cover_variants']))
             ->columns([
                 TextColumn::make('collection_name')
                     ->label('Type')
@@ -77,7 +79,7 @@ class ProductMediaRelationManager extends RelationManager
                             ->disk('local')
                             ->directory('product-media')
                             ->visibility('private')
-                            ->acceptedFileTypes(fn (Get $get): array => in_array($get('collection_name'), ['screenshots', 'cover'], true)
+                            ->acceptedFileTypes(fn (Get $get): array => $get('collection_name') === 'screenshots'
                                 ? ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
                                 : ['video/mp4', 'video/webm', 'video/quicktime'])
                             ->required(),
@@ -111,7 +113,6 @@ class ProductMediaRelationManager extends RelationManager
             'short_plays' => 'Short play',
             'videos' => 'Video (ancien media)',
             'screenshots' => 'Capture d’ecran',
-            'cover' => 'Illustration du jeu',
         ];
     }
 

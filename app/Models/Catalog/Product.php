@@ -34,6 +34,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string|null $description
  * @property int $price_amount
  * @property string $status
+ * @property string|null $primary_color
+ * @property string|null $secondary_color
+ * @property bool $colors_are_manual
  * @property Carbon|null $published_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -60,6 +63,7 @@ class Product extends Model implements HasMedia
         'status' => ProductStatus::class,
         'price_amount' => 'int',
         'published_at' => 'datetime',
+        'colors_are_manual' => 'boolean',
     ];
 
     protected $fillable = [
@@ -71,6 +75,9 @@ class Product extends Model implements HasMedia
         'description',
         'price_amount',
         'status',
+        'primary_color',
+        'secondary_color',
+        'colors_are_manual',
         'published_at',
     ];
 
@@ -78,6 +85,9 @@ class Product extends Model implements HasMedia
     {
         $this->addMediaCollection('cover')
             ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
+
+        $this->addMediaCollection('cover_variants')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
 
         $this->addMediaCollection('screenshots')

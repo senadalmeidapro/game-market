@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Catalog\Products\Schemas;
 
+use App\Enums\Catalog\CoverFormat;
 use App\Enums\Catalog\ProductFileKind;
 use App\Enums\Catalog\ProductFileStatus;
 use App\Enums\Catalog\ProductVersionStatus;
@@ -28,6 +29,34 @@ class ProductCreateForm
                 Tabs::make('Jeu')
                     ->extraAttributes(['class' => 'gamehub-centered-tabs'])
                     ->tabs([
+                        Tab::make('Jaquettes')
+                            ->schema([
+                                Repeater::make('cover_variants')
+                                    ->label('Formats derives de la jaquette principale')
+                                    ->schema([
+                                        Select::make('format')
+                                            ->label('Format de jaquette')
+                                            ->options(CoverFormat::variantOptions())
+                                            ->live()
+                                            ->required(),
+                                        FileUpload::make('file')
+                                            ->label('Image de jaquette derivee')
+                                            ->image()
+                                            ->acceptedFileTypes(fn (Get $get): array => CoverFormat::tryFrom((string) $get('format'))?->acceptedMimeTypes() ?? ['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
+                                            ->rules(fn (Get $get): array => CoverFormat::tryFrom((string) $get('format'))?->validationRules() ?? [])
+                                            ->validationMessages(['dimensions' => 'L’image ne respecte pas les dimensions du format selectionne.'])
+                                            ->disk('local')
+                                            ->directory('product-media/cover-variants')
+                                            ->visibility('private')
+                                            ->required()
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(2)
+                                    ->collapsed()
+                                    ->addActionLabel('Ajouter un format derive')
+                                    ->dehydrated(false)
+                                    ->columnSpanFull(),
+                            ]),
                         Tab::make('A propos')
                             ->schema(ProductForm::aboutComponents())
                             ->columns(2),
@@ -75,7 +104,6 @@ class ProductCreateForm
                                                 'gameplay' => 'Gameplay',
                                                 'short_plays' => 'Short play',
                                                 'screenshots' => 'Capture d’ecran',
-                                                'cover' => 'Illustration du jeu',
                                             ])
                                             ->live()
                                             ->required(),
@@ -87,7 +115,7 @@ class ProductCreateForm
                                             ->disk('local')
                                             ->directory('product-media')
                                             ->visibility('private')
-                                            ->acceptedFileTypes(fn (Get $get): array => in_array($get('collection_name'), ['screenshots', 'cover'], true)
+                                            ->acceptedFileTypes(fn (Get $get): array => $get('collection_name') === 'screenshots'
                                                 ? ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
                                                 : ['video/mp4', 'video/webm', 'video/quicktime'])
                                             ->required()
